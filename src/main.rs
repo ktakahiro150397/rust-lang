@@ -10,9 +10,9 @@ fn main() {
     m.call();
 
     // Option<T> : 有効な値か、無効な値を表すenum
-    let suspect_number : Option<i32> = None;
-    let suspect_number2 : Option<i32> = Some(999); // Some(T_value)のような形式で設定する必要がある
-    // let suspect_number3 : i32 = None; // i32にOption<T>::Noneは当然代入できない
+    let suspect_number: Option<i32> = None;
+    let suspect_number2: Option<i32> = Some(999); // Some(T_value)のような形式で設定する必要がある
+                                                  // let suspect_number3 : i32 = None; // i32にOption<T>::Noneは当然代入できない
 
     print_number(suspect_number);
     print_number(suspect_number2);
@@ -26,16 +26,51 @@ fn main() {
     print_number(suspect_number4);
     let suspect_number5 = add_number(suspect_number4, 30);
     print_number(suspect_number5);
-   
+
+    let number = Some(7);
+    // numberが7の場合にprintする
+
+    // match使うと冗長
+    match number {
+        Some(value) => {
+            if (value == 7) {
+                println!("(Patturn and if)Lucky number 7!");
+            }
+        }
+        _ => println!("(Patturn and if)Not 7!"),
+    }
+
+    // リテラルでmatchすることもできる
+    match number {
+        Some(7) => println!("(Literal)Lucky number 7!"),
+        _ => (),
+    }
+
+    // if letで簡潔に書く
+    // matchの最初のパターンとマッチした場合に実行するような動作
+    // matchの包括性が失われる(Noneの場合、7以外の場合に処理しない)
+    if let Some(7) = number {
+        println!("(if let)Lucky number 7!");
+    } else {
+        println!("(if let)Not 7!");
+    }
+
+    // 以下のmatchと等価
+    match number {
+        Some(7) => println!("Lucky number 7!"),
+        _ => println!("(if let)Not 7!"),
+    }
+
+    //if let Some(value) = number {}
 
     println!("Done!");
 }
 
-fn print_number(suspect_number:Option<i32>) {
-match suspect_number {
+fn print_number(suspect_number: Option<i32>) {
+    match suspect_number {
         Some(value) => {
             println!("Value is valid! : {}", value);
-        },
+        }
         None => {
             // ここでi32にアクセスすることはできない！よい思想ですね
             println!("Value is None!");
@@ -43,7 +78,7 @@ match suspect_number {
     }
 }
 
-fn add_number(suspect_number:Option<i32>,add_number:i32) -> Option<i32> {
+fn add_number(suspect_number: Option<i32>, add_number: i32) -> Option<i32> {
     // match suspect_number {
     //     Some(value) => {
     //         return Some(value + add_number);
@@ -51,8 +86,9 @@ fn add_number(suspect_number:Option<i32>,add_number:i32) -> Option<i32> {
     //     None => None,
     // }
 
-    // 1行で書くこともできます
+    // アームそれぞれを1行で書くこともできます
     match suspect_number {
+        // Some(7) => Some(7+add_number), // Some(7)のみだと、他のすべてのパターンがマッチしないためコンパイルエラー
         Some(value) => Some(value + add_number),
         None => None,
     }
@@ -76,7 +112,7 @@ impl Message {
         match self {
             Message::Write(arg) => {
                 println!("Write: {}", arg);
-            },
+            }
             // 分岐する際の引数はコンパイルチェックあり
             // Message::ChangeColor(arg) => {
             //     println!("ChangeColor!");
