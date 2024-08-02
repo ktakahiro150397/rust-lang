@@ -4,23 +4,55 @@ struct Rectangle {
     height: u32,
 }
 
+
+// impl <struct> で構造体にメソッドを追加できる
+impl Rectangle {
+    fn area(&self) -> u32 {
+        // &self は構造体自身のインスタンスを指している
+        self.width * self.height
+    }
+
+    fn setWidth(&mut self,width:u32){
+        //可変でselfを受けることもできる。この場合、構造体インスタンス自体がmutである必要がある
+        self.width = width;
+    }
+
+    fn square(size: u32) -> Rectangle {
+        // インスタンスではなく、構造体に属する関連関数
+        // <struct>::<function>(args) で呼び出す
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+
 fn main() {
-    let width1 = 30;
-    let height1 = 50;
-
-    let rect1 = (30, 50);
-
-    let rect2 = Rectangle {
+    let mut rect2 = Rectangle {
         width: 30,
         height: 50,
     };
 
     println!(
         "The area of the rectanble is {} square pixels.",
-        area(&rect2)
+        rect2.area()
+    );
+    println!("rect is {:#?}!", rect2);
+
+
+    rect2.setWidth(40);
+    println!(
+        "The area of the rectanble is {} square pixels.",
+        rect2.area()
+    );
+    println!("rect is {:#?}!", rect2);
+
+    let square = Rectangle::square(3);
+    println!(
+        "The area of the rectanble is {} square pixels.",
+        square.area()
     );
 
-    println!("rect is {:#?}!", rect2);
 }
 
 // fn area(width: u32, height: u32) -> u32 {
@@ -32,8 +64,3 @@ fn main() {
 //     dimensions.0 * dimensions.1
 // }
 
-fn area(rect: &Rectangle) -> u32 {
-    // 構造体で受けることで意味が明確になる
-    // ただし、参照を使わないとムーブが発生する。基本的には参照を受けるようにしたほうがよさげ
-    rect.width * rect.height
-}
