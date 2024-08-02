@@ -1,48 +1,39 @@
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
 fn main() {
-    // println!("Hello, world!");
+    let width1 = 30;
+    let height1 = 50;
 
-    // mutを付ける場合、そのインスタンス全体が可変になるぞ！
-    // let mut user = User {
-    //     username: String::from("John"),
-    //     email: String::from("test@test.com"),
-    //     age: 27,
-    // };
+    let rect1 = (30, 50);
 
-    // user.username = String::from("Jane");
-
-    let user = build_user("John".to_string(), "test@test.com".to_string(), 27);
-
-    println!("User: {}", user.username);
-    println!("User: {}", user.email);
-
-    // 別のユーザーをインスタンスから生成
-    // let user2 = User {
-    //     username: "Jane".to_string(),
-    //     email: user.email,
-    //     age: user.age,
-    // };
-
-    // ..userでuserの残りのフィールドを使うことができる　便利すなあ
-    let user2 = User {
-        username: "Jane".to_string(),
-        ..user
+    let rect2 = Rectangle {
+        width: 30,
+        height: 50,
     };
 
-    println!("User2: {}", user2.username);
-    println!("User2: {}", user2.email);
+    println!(
+        "The area of the rectanble is {} square pixels.",
+        area(&rect2)
+    );
+
+    println!("rect is {:#?}!", rect2);
 }
 
-fn build_user(username: String, email: String, age: u8) -> User {
-    // フィールド名と同一の変数を使うと省略記法が使える dartの{this.param,...}みたいな感じ
-    return User {
-        username,
-        email,
-        age,
-    };
-}
+// fn area(width: u32, height: u32) -> u32 {
+//     width * height
+// }
 
-struct User {
-    username: String, // &strで文字列の参照だけを保持しておけばええやんと思うが、それはダメらしい。構造体自身がこのデータを所有する必要がある
-    email: String,
-    age: u8,
+// fn area(dimensions: (u32, u32)) -> u32 {
+//     // タプルで扱う場合
+//     dimensions.0 * dimensions.1
+// }
+
+fn area(rect: &Rectangle) -> u32 {
+    // 構造体で受けることで意味が明確になる
+    // ただし、参照を使わないとムーブが発生する。基本的には参照を受けるようにしたほうがよさげ
+    rect.width * rect.height
 }
