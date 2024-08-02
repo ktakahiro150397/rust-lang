@@ -1,48 +1,29 @@
 fn main() {
-    // println!("Hello, world!");
 
-    // mutを付ける場合、そのインスタンス全体が可変になるぞ！
-    // let mut user = User {
-    //     username: String::from("John"),
-    //     email: String::from("test@test.com"),
-    //     age: 27,
-    // };
-
-    // user.username = String::from("Jane");
-
-    let user = build_user("John".to_string(), "test@test.com".to_string(), 27);
-
-    println!("User: {}", user.username);
-    println!("User: {}", user.email);
-
-    // 別のユーザーをインスタンスから生成
-    // let user2 = User {
-    //     username: "Jane".to_string(),
-    //     email: user.email,
-    //     age: user.age,
-    // };
-
-    // ..userでuserの残りのフィールドを使うことができる　便利すなあ
-    let user2 = User {
-        username: "Jane".to_string(),
-        ..user
+    let _dont_do_this = IpAddrDontDoThis {
+        ip_addr_kind: IpAddrKindDontDoThis::V4,
+        address: String::from("192.168.11.0"),
     };
 
-    println!("User2: {}", user2.username);
-    println!("User2: {}", user2.email);
+    let _ip_kind = IpAddrKind::V4(192,168,11,0);
+
+    println!("Done!");
 }
 
-fn build_user(username: String, email: String, age: u8) -> User {
-    // フィールド名と同一の変数を使うと省略記法が使える dartの{this.param,...}みたいな感じ
-    return User {
-        username,
-        email,
-        age,
-    };
+enum IpAddrKind {
+    // enumに、関連するデータ型を埋め込むことがｄけいる！
+    V4(u8, u8, u8, u8),
+    V6(String),
 }
 
-struct User {
-    username: String, // &strで文字列の参照だけを保持しておけばええやんと思うが、それはダメらしい。構造体自身がこのデータを所有する必要がある
-    email: String,
-    age: u8,
+
+enum IpAddrKindDontDoThis {
+    V4,
+    V6,
+}
+
+struct IpAddrDontDoThis {
+    // 構造体にenumと、それに紐づくデータ型を持ったこういう構造体はRustでは作らなくていい
+    ip_addr_kind : IpAddrKindDontDoThis,
+    address: String
 }
