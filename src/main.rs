@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     // i32を格納するベクタを作成
     let v: Vec<i32> = Vec::new();
@@ -99,6 +101,24 @@ fn main() {
     // UTF-8のため、有効な文字かバイトかが不明
     // 検証する必要があるため、O(1)にならないため
     // println!("s[0]:{}", s[0]);
+
+    // ハッシュマップ
+    let mut map = HashMap::new();
+    map.insert("blue", 10);
+    map.insert("red", 20);
+    map.insert("yello",30);
+
+    println!("{:?}", map);
+
+    // ベクタから作成することもできる
+    let teams = vec!["blue", "red", "yellow"];
+    let initial_scores = vec![10, 20, 30];
+
+    let map = teams.iter().zip(initial_scores.iter());
+    println!("{:?}", map);
+
+    let map: HashMap<_,_> = teams.iter().zip(initial_scores.iter()).collect();
+    println!("{:?}", map);
 }
 
 #[derive(Debug)]
