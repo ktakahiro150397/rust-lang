@@ -69,6 +69,36 @@ fn main() {
             _ => println!("Other value"),
         }
     }
+
+    // 文字列について
+    // Vec<T>とほぼ共通 -> 文字のコレクションであるため
+    let s = String::new();
+
+    let data = "initial contents";
+    let s = data.to_string();
+
+    // String初期化はto_string()かString::from()を使う
+    let s = "initial contents".to_string();
+    let s = String::from("initial contents");
+
+    println!("s:{}", s);
+
+    // 文字列スライスを追加できる
+    let mut s = "foo".to_string();
+    s.push_str("bar");
+
+    println!("s:{}", s);
+
+    let mut s = "lo".to_string();
+    s.push('l'); // 1文字だけ追加できる シングルクォートを使ってcharリテラルにする
+
+    println!("s:{}", s);
+    println!("s:{}", &s[..]);
+
+    // 文字列インデックスアクセスは禁止
+    // UTF-8のため、有効な文字かバイトかが不明
+    // 検証する必要があるため、O(1)にならないため
+    // println!("s[0]:{}", s[0]);
 }
 
 #[derive(Debug)]
