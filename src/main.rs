@@ -1,48 +1,79 @@
 fn main() {
-    // println!("Hello, world!");
+    // i32を格納するベクタを作成
+    let v: Vec<i32> = Vec::new();
 
-    // mutを付ける場合、そのインスタンス全体が可変になるぞ！
-    // let mut user = User {
-    //     username: String::from("John"),
-    //     email: String::from("test@test.com"),
-    //     age: 27,
-    // };
+    // vec!は要素を格納するベクタを新しく作成するマクロ
+    let v = vec![1,2,3];
 
-    // user.username = String::from("Jane");
+    // 要素の追加
+    let mut v = Vec::new();
 
-    let user = build_user("John".to_string(), "test@test.com".to_string(), 27);
+    v.push(1);
+    v.push(2);
+    v.push(3);
+    v.push(4);
+    v.push(5);
 
-    println!("User: {}", user.username);
-    println!("User: {}", user.email);
+    let third: &i32 = &v[2]; // 参照を得る
+    println!("The third element is {}", third);
 
-    // 別のユーザーをインスタンスから生成
-    // let user2 = User {
-    //     username: "Jane".to_string(),
-    //     email: user.email,
-    //     age: user.age,
-    // };
+    // getメソッドでもよい Option<T>で返ってくる
+    match v.get(2) {
+        Some(value) => println!("The third element is {}", value),
+        None => println!("There is no third element."),
+    }
+    match v.get(99) {
+        Some(value) => println!("The 100th element is {}", value),
+        None => println!("There is no 100th element."),
+    }
 
-    // ..userでuserの残りのフィールドを使うことができる　便利すなあ
-    let user2 = User {
-        username: "Jane".to_string(),
-        ..user
-    };
+    // 不変な参照と可変な参照は同時に存在できない。これはベクタの要素を通して全体に適用される。
+    let mut v = vec![1,2,3,4,5]; // 可変
+    let first = &v[0]; // 最初の要素への不変な参照
 
-    println!("User2: {}", user2.username);
-    println!("User2: {}", user2.email);
+    v.push(6); // ベクタ末尾に追加
+
+    println!("Vector is : {:?}", v);
+
+    // 最初の要素を参照するとエラー
+    // ベクタは全体が別の領域にコピーされる可能性があるため、コンパイルチェックが入る
+    // println!("First element is : {}", first);
+
+    // ベクタの不変参照を列挙できる
+    for i in &v {
+        println!("{}", i);
+    }
+
+    for i in &mut v {
+        // 列挙中のコレクションを変更することができるんすね
+        *i += 50; // 参照外し演算子*：後ほど出てくる
+    }
+    println!("Vector is : {:?}", v);
+
+
+    // enumをベクタに格納できる
+    // enumはさらに値を持てるため、異なる型の要素をベクタに持つことができる
+    let cells = vec![
+        SpreadSheetCell::Int(3),
+        SpreadSheetCell::Text(String::from("blue")),
+        SpreadSheetCell::Float(10.12),
+        ];
+    println!("{:?}", cells);
+
+    for cell in &cells {
+        // matchで列挙型の値を取り出せる
+        match cell {
+            SpreadSheetCell::Int(value) => println!("Int value is {}", value),
+            SpreadSheetCell::Text(value) => println!("Text value is {}", value),
+            SpreadSheetCell::Float(value) => println!("Float value is {}", value),
+            _ => println!("Other value"),
+        }
+    }
 }
 
-fn build_user(username: String, email: String, age: u8) -> User {
-    // フィールド名と同一の変数を使うと省略記法が使える dartの{this.param,...}みたいな感じ
-    return User {
-        username,
-        email,
-        age,
-    };
-}
-
-struct User {
-    username: String, // &strで文字列の参照だけを保持しておけばええやんと思うが、それはダメらしい。構造体自身がこのデータを所有する必要がある
-    email: String,
-    age: u8,
+#[derive(Debug)]
+enum SpreadSheetCell {
+    Int(i32),
+    Text(String),
+    Float(f64),
 }
